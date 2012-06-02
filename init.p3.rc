@@ -178,7 +178,7 @@ on boot
      setprop wifi.interface "eth0"
 # end of wifi
 
-# Power management settings, switch kernel to prefered governor, seems to prime and allow SetCPU to work on boot
+# Power management settings
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
 
@@ -230,8 +230,11 @@ on boot
     chmod 0664 /sys/devices/virtual/misc/level/control	
 # Camera
     chown system radio /sys/class/sec/sec_s5k5ccgx/cameraflash
-		chown system radio /sys/class/sec/sec_s5k5ccgx/camtype
-		chown system radio /sys/class/sec/sec_s5k5bbgx/camtype
+    chown system radio /sys/class/sec/sec_s5k5ccgx/camtype
+    chown system radio /sys/class/sec/sec_s5k5bbgx/camtype
+
+# Change permissions on cameraflash so that we can use it with Torch
+    chmod 0666 /sys/devices/virtual/sec/sec_s5k5ccgx/cameraflash
 
 # crypto permissions
     chown system system /dev/tegra-crypto
@@ -245,6 +248,9 @@ on boot
     chown system system /system/etc/hdmi/dectable1.dat
     chmod 0440 /system/etc/hdmi/dectable1.dat
 
+#USB charging
+    write /sys/class/power_supply/battery/force_usb_charging 1
+    
 on property:vold.decrypt=check_integrity
     exec check_encrypted_filesystem
     setprop vold.post_fs_data_done 1
@@ -257,8 +263,8 @@ service drm /system/bin/drmserver
     user drm
     group system root inet sdcard_rw
 
-service wpa_supplicant /system/bin/wpa_supplicant -Dwext -ieth0 \
-	-c/data/misc/wifi/wpa_supplicant.conf -e/data/misc/wifi/entropy.bin
+service wpa_supplicant /system/bin/wpa_supplicant -Dnl80211 -ieth0 \
+        -c/data/misc/wifi/wpa_supplicant.conf -e/data/misc/wifi/entropy.bin
     class main
     socket wpa_eth0 dgram 0660 wifi wifi
     disabled
