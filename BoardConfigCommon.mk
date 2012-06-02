@@ -70,11 +70,12 @@ BOARD_FLASH_BLOCK_SIZE := 4096
 
 # Wifi related defines
 WPA_SUPPLICANT_VERSION := VER_0_8_X
-BOARD_WPA_SUPPLICANT_DRIVER := WEXT
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
-BOARD_HOSTAP_DRIVER := WEXT
-BOARD_HOSTAP_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_bcmdhd
 BOARD_WLAN_DEVICE := bcmdhd
+
 WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/bcmdhd.ko"
 WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcmdhd/parameters/firmware_path"
 WIFI_DRIVER_FW_PATH_STA     := "/system/vendor/firmware/fw_bcmdhd.bin"
@@ -97,3 +98,8 @@ BOARD_CHARGING_MODE_BOOTING_LPM := "/sys/class/power_supply/battery/charging_mod
 # Don't dequeue current buffer
 BOARD_NO_ALLOW_DEQUEUE_CURRENT_BUFFER := true
 
+# Custom graphics for recovery
+BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/p5-common/recovery/graphics.c
+
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 699744256
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 14080704512
